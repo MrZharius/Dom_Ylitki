@@ -69,6 +69,7 @@
         <button onclick="openVideo('https://rutube.ru/video/4695ec1afa0cb5d2d156485ac579c43d')">Видеоурок 2</button>
         <button onclick="openVideo('https://rutube.ru/video/0c8b6f02bb45e7bafd2c17a339976de9')">Видеоурок 3</button>
         <button onclick="openVideo('https://rutube.ru/video/0d111012a364876a0ad56db674272a40')">Видеоурок 4</button>
+
     </div>
 
     <div id="videoContainer" class="video-container">
@@ -84,7 +85,7 @@
         const webApp = window.Telegram.WebApp;
 
         function openVideo(videoUrl) {
-            fetch(`http://localhost:5000/get-rutube-url?videoUrl=${encodeURIComponent(videoUrl)}`)
+            fetch(`http://127.0.0.1:5000/get-rutube-url?videoUrl=${encodeURIComponent(videoUrl)}`)
                 .then(response => response.json())
                 .then(data => {
                     if (data.success && data.videoUrl) {
