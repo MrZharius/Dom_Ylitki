@@ -9,9 +9,8 @@
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            background-image: url('	https://thb.tildacdn.com/tild3638-3535-4630-b938-326637356365/-/resize/20x/12.png'); /* Замените на ваш URL изображения */
-            background-size: cover;
-            color: white;
+            background-color: #f0f0f0;
+            color: black;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -66,11 +65,10 @@
 <body>
     <div class="container">
         <h1>Выберите видеоурок</h1>
-        <button onclick="openVideo(1)">Видеоурок 1</button>
-        <button onclick="openVideo(2)">Видеоурок 2</button>
-        <button onclick="openVideo(3)">Видеоурок 3</button>
-    
-        <button onclick="openVideo(15)">Видеоурок 15</button>
+        <button onclick="openVideo('https://rutube.ru/video/e07ba7811d526cde1ac50932ae24fe03')">Видеоурок 1</button>
+        <button onclick="openVideo('https://rutube.ru/video/4695ec1afa0cb5d2d156485ac579c43d')">Видеоурок 2</button>
+        <button onclick="openVideo('https://rutube.ru/video/0c8b6f02bb45e7bafd2c17a339976de9')">Видеоурок 3</button>
+        <button onclick="openVideo('https://rutube.ru/video/0d111012a364876a0ad56db674272a40')">Видеоурок 4</button>
     </div>
 
     <div id="videoContainer" class="video-container">
@@ -85,30 +83,25 @@
     <script>
         const webApp = window.Telegram.WebApp;
 
-        function openVideo(lessonNumber) {
-            const videoUrl = getVideoUrl(lessonNumber);
-            if (videoUrl) {
-                document.getElementById('videoPlayer').src = videoUrl;
-                document.getElementById('videoContainer').style.display = 'block';
-            } else {
-                alert('Видео для данного урока недоступно.');
-            }
+        function openVideo(videoUrl) {
+            fetch(`http://localhost:5000/get-rutube-url?videoUrl=${encodeURIComponent(videoUrl)}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success && data.videoUrl) {
+                        document.getElementById('videoPlayer').src = data.videoUrl;
+                        document.getElementById('videoContainer').style.display = 'block';
+                    } else {
+                        alert('Видео недоступно.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Ошибка:', error);
+                    alert('Не удалось загрузить видео.');
+                });
         }
 
         function closeVideo() {
             document.getElementById('videoContainer').style.display = 'none';
-        }
-
-        function getVideoUrl(lessonNumber) {
-            // Здесь можно добавить логику для получения URL видео по номеру урока
-            const videoUrls = [
-                "https://rutube.ru/video/e07ba7811d526cde1ac50932ae24fe03/", // Видео для урока 1
-                "https://example.com/video2.mp4", // Видео для урока 2
-                "https://example.com/video3.mp4", // Видео для урока 3
-                
-                "https://example.com/video15.mp4" // Видео для урока 15
-            ];
-            return videoUrls[lessonNumber - 1];
         }
     </script>
 </body>
